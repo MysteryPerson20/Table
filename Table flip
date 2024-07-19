@@ -1,0 +1,21 @@
+-- This script equips the second tool in the player's backpack
+local player = game.Players.LocalPlayer
+local backpack = player.Backpack
+
+-- Function to equip the second tool
+local function equipSecondTool()
+    -- Ensure there are at least 2 tools in the backpack
+    if #backpack:GetChildren() >= 2 then
+        local secondTool = backpack:GetChildren()[2]
+        if secondTool:IsA("Tool") then
+            player.Character.Humanoid:EquipTool(secondTool)
+        else
+            warn("The second item is not a tool.")
+        end
+    else
+        warn("Not enough tools in the backpack.")
+    end
+end
+
+-- Call the function to equip the second tool
+equipSecondTool()
