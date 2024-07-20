@@ -1,21 +1,32 @@
--- This script equips the second tool in the player's backpack
-local player = game.Players.LocalPlayer
-local backpack = player.Backpack
+-- Make sure this script is a LocalScript and placed inside StarterPlayerScripts
 
--- Function to equip the second tool
-local function equipSecondTool()
-    -- Ensure there are at least 2 tools in the backpack
-    if #backpack:GetChildren() >= 2 then
-        local secondTool = backpack:GetChildren()[2]
-        if secondTool:IsA("Tool") then
-            player.Character.Humanoid:EquipTool(secondTool)
-        else
-            warn("The second item is not a tool.")
+local toolName = "Table Flip"
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+local function equipAndUseTool(tool)
+    -- Equip the tool
+    character.Humanoid:EquipTool(tool)
+    -- Use the tool (fires the tool's activation function)
+    tool:Activate()
+end
+
+local function checkForTool()
+    local backpack = player.Backpack
+    for _, item in ipairs(backpack:GetChildren()) do
+        if item:IsA("Tool") and item.Name == toolName then
+            equipAndUseTool(item)
+            break
         end
-    else
-        warn("Not enough tools in the backpack.")
     end
 end
 
--- Call the function to equip the second tool
-equipSecondTool()
+-- Check if the player already has the tool when the script runs
+checkForTool()
+
+-- Listen for new tools being added to the backpack
+player.Backpack.ChildAdded:Connect(function(child)
+    if child:IsA("Tool") and child.Name == toolName then
+        equipAndUseTool(child)
+    end
+end)
