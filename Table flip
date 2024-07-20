@@ -1,12 +1,27 @@
+-- Get the player's character and backpack
 local player = game.Players.LocalPlayer
-local backpack = player.Backpack
+local backpack = player:WaitForChild("Backpack")
+local character = player.Character or player.CharacterAdded:Wait()
 
--- Check if the third tool exists in the backpack
-if #backpack:GetChildren() >= 3 then
-    local thirdTool = backpack:GetChildren()[3]
+-- Wait for the tool named "Table Flip" to be added to the backpack
+local tool = backpack:WaitForChild("Table Flip")
 
-    -- Equip the third tool
-    player.Character.Humanoid:EquipTool(thirdTool)
-else
-    warn("You don't have a third tool in your backpack.")
+-- Function to activate the tool
+local function activateTool(tool)
+    if tool:IsA("Tool") then
+        -- Move the tool to the character's hand
+        tool.Parent = character
+        
+        -- Activate the tool
+        tool:Activate()
+        
+        -- Optionally, you can move the tool back to the backpack after a short delay
+        wait(1)  -- Adjust the delay as needed
+        tool.Parent = backpack
+    else
+        warn("The item is not a tool.")
+    end
 end
+
+-- Activate the tool
+activateTool(tool)
