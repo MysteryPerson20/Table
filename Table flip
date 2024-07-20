@@ -1,34 +1,12 @@
--- Make sure this script is a LocalScript and placed inside StarterPlayerScripts
-
-local toolName = "Table Flip"
 local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
+local backpack = player.Backpack
 
-local function equipAndUseTool(tool)
-    if tool.Name == toolName then
-        -- Equip the tool
-        character.Humanoid:EquipTool(tool)
-        -- Use the tool (fires the tool's activation function)
-        tool:Activate()
-    end
+-- Check if the third tool exists in the backpack
+if #backpack:GetChildren() >= 3 then
+    local thirdTool = backpack:GetChildren()[3]
+
+    -- Equip the third tool
+    player.Character.Humanoid:EquipTool(thirdTool)
+else
+    warn("You don't have a third tool in your backpack.")
 end
-
-local function checkForTool()
-    local backpack = player.Backpack
-    for _, item in ipairs(backpack:GetChildren()) do
-        if item:IsA("Tool") and item.Name == toolName then
-            equipAndUseTool(item)
-            break
-        end
-    end
-end
-
--- Check if the player already has the tool when the script runs
-checkForTool()
-
--- Listen for new tools being added to the backpack
-player.Backpack.ChildAdded:Connect(function(child)
-    if child:IsA("Tool") and child.Name == toolName then
-        equipAndUseTool(child)
-    end
-end)
