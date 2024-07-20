@@ -5,10 +5,12 @@ local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 
 local function equipAndUseTool(tool)
-    -- Equip the tool
-    character.Humanoid:EquipTool(tool)
-    -- Use the tool (fires the tool's activation function)
-    tool:Activate()
+    if tool.Name == toolName then
+        -- Equip the tool
+        character.Humanoid:EquipTool(tool)
+        -- Use the tool (fires the tool's activation function)
+        tool:Activate()
+    end
 end
 
 local function checkForTool()
